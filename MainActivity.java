@@ -101,23 +101,31 @@ public class MainActivity extends AppCompatActivity {
                 Log.d("APP_DEBUG", "Class " + i + " Confidence: " + confidences[i]);
             }
 
-            // Determine class label
+            // Determine class label and set color accordingly
             String resultText;
+            int textColor;
+
             if (confidences.length == 1) {
                 float malignantConfidence = confidences[0];
-                resultText = malignantConfidence > 0.9 ?
-                        "Malignant (" + String.format("%.2f", malignantConfidence * 100) + "% confidence)" :
-                        (malignantConfidence <= 0.5 ?
-                                "Benign (" + String.format("%.2f", (1 - malignantConfidence) * 100) + "% confidence)" :
-                                "Benign (" + String.format("%.2f", malignantConfidence * 100) + "% confidence)");
-            }  else {
+                if (malignantConfidence > 0.9) {
+                    resultText = "Malignant (" + String.format("%.2f", malignantConfidence * 100) + "% confidence)";
+                    textColor = Color.RED;
+                } else {
+                    resultText = (malignantConfidence <= 0.5)
+                            ? "Benign (" + String.format("%.2f", (1 - malignantConfidence) * 100) + "% confidence)"
+                            : "Benign (" + String.format("%.2f", malignantConfidence * 100) + "% confidence)";
+                    textColor = Color.BLACK;
+                }
+            } else {
                 int predictedClass = confidences[0] > confidences[1] ? 0 : 1;
                 resultText = (predictedClass == 0 ? "Benign" : "Malignant") +
                         " (" + String.format("%.2f", confidences[predictedClass] * 100) + "% confidence)";
+                textColor = (predictedClass == 1) ? Color.RED : Color.BLACK;
             }
 
-            // Display result on UI
+            // Update UI
             result.setText(resultText);
+            result.setTextColor(textColor); // Set the text color
             Toast.makeText(this, resultText, Toast.LENGTH_LONG).show();
             Log.d("APP_DEBUG", "Classification completed: " + resultText);
 
