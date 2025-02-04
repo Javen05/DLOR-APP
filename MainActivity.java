@@ -107,13 +107,11 @@ public class MainActivity extends AppCompatActivity {
 
             if (confidences.length == 1) {
                 float malignantConfidence = confidences[0];
-                if (malignantConfidence > 0.9) {
+                if (malignantConfidence > 0.5) {
                     resultText = "Malignant (" + String.format("%.2f", malignantConfidence * 100) + "% confidence)";
                     textColor = Color.RED;
                 } else {
-                    resultText = (malignantConfidence <= 0.5)
-                            ? "Benign (" + String.format("%.2f", (1 - malignantConfidence) * 100) + "% confidence)"
-                            : "Benign (" + String.format("%.2f", malignantConfidence * 100) + "% confidence)";
+                    resultText = "Benign (" + String.format("%.2f", (1 - malignantConfidence) * 100) + "% confidence)";
                     textColor = Color.BLACK;
                 }
             } else {
